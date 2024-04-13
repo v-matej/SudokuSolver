@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Sudoku Solver"
 include(":app")
+include (":opencv")
  
