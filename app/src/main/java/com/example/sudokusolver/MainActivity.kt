@@ -14,18 +14,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Inflate the layout using DataBindingUtil
         val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (OpenCVLoader.initLocal()) {
-            Log.i("OpenCV", "OpenCV successfully loaded.")
-        }
-
-        // Set click listener using binding object
         binding.takePhotoButton.setOnClickListener {
             val intent = Intent(this@MainActivity, CameraActivity::class.java)
             startActivity(intent)
+        }
+    }
+    companion object {
+        init {
+            if (!OpenCVLoader.initLocal()) {
+                Log.d("My App", "Unable to load OpenCV")
+            } else {
+                Log.d("My App", "OpenCV loaded")
+            }
         }
     }
 }

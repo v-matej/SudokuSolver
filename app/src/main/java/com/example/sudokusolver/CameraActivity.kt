@@ -104,13 +104,10 @@ class CameraActivity : AppCompatActivity() {
                     val savedUri = Uri.fromFile(photoFile)
                     Toast.makeText(this@CameraActivity, "Photo captured!", Toast.LENGTH_SHORT).show()
 
-                    // Load the captured image into a Bitmap
                     val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
 
-                    // Crop and rotate the Bitmap to 1:1 aspect ratio
                     val croppedBitmap = cropAndRotateBitmapToSquare(bitmap)
 
-                    // Save the cropped Bitmap to a file
                     val croppedPhotoFile = File(
                         getOutputDirectory(),
                         "cropped_sudoku.jpg"
@@ -120,7 +117,6 @@ class CameraActivity : AppCompatActivity() {
                     croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
                     outputStream.close()
 
-                    // Pass the URI of the cropped photo to the PreviewActivity
                     val croppedPhotoUri = Uri.fromFile(croppedPhotoFile)
                     navigateToPreviewActivity(croppedPhotoUri)
                 }
@@ -145,17 +141,14 @@ class CameraActivity : AppCompatActivity() {
         val width = bitmap.width
         val height = bitmap.height
 
-        // Calculate the dimensions for the square crop
         val size = if (width < height) width else height
         val left = (width - size) / 2
         val top = (height - size) / 2
 
-        // Create the cropped Bitmap
         val croppedBitmap = Bitmap.createBitmap(bitmap, left, top, size, size)
 
-        // Rotate the cropped Bitmap by 90 degrees clockwise
         val matrix = Matrix().apply {
-            postRotate(90f) // Rotate by 90 degrees clockwise
+            postRotate(90f)
         }
         return Bitmap.createBitmap(croppedBitmap, 0, 0, croppedBitmap.width, croppedBitmap.height, matrix, true)
     }
@@ -168,6 +161,5 @@ class CameraActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_CODE_PERMISSIONS = 10
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     }
 }
