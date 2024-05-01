@@ -45,6 +45,7 @@ class PreviewActivity : AppCompatActivity() {
         val cells = SudokuDetectionHelper.exitractCells(sudokuGrid)
 
         val gridUri = storageHelper.saveSudokuGrid(sudokuGrid)
+        storageHelper.saveCells(cells)
 
         Glide.with(this)
             .load(gridUri)
