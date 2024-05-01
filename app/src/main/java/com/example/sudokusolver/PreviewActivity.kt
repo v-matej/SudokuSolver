@@ -39,9 +39,10 @@ class PreviewActivity : AppCompatActivity() {
         val matObj = Mat(bmp.width, bmp.height, CvType.CV_8UC4)
         Utils.bitmapToMat(bmp,matObj)
 
-        val output = LineDetectionHelper.detectSudoku(matObj)
+        val sudokuGrid = SudokuDetectionHelper.detectSudoku(matObj)
+        val cells = SudokuDetectionHelper.exitractCells(sudokuGrid)
 
-        val gridUri = saveMatAsJpeg(output)
+        val gridUri = savesSudokuGrid(sudokuGrid)
 
         Glide.with(this)
             .load(gridUri)
@@ -51,7 +52,7 @@ class PreviewActivity : AppCompatActivity() {
     }
 
 
-    private fun saveMatAsJpeg(mat: Mat): Uri? {
+    private fun savesSudokuGrid(mat: Mat): Uri? {
 
         val bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888)
         Utils.matToBitmap(mat, bitmap)

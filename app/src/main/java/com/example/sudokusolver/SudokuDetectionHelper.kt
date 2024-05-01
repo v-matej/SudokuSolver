@@ -5,7 +5,7 @@ import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 import org.opencv.utils.Converters
 
-object LineDetectionHelper {
+object SudokuDetectionHelper {
 
     fun detectSudoku(originalImage: Mat): Mat {
         val grayImage = Mat()
@@ -56,6 +56,22 @@ object LineDetectionHelper {
         Imgproc.warpPerspective(originalImage, warpedImage, transformationMatrix, Size(400.0, 400.0))
 
         return warpedImage
+    }
+
+    fun exitractCells(croppedSudoku:Mat): List<Mat> {
+
+        val cellSize = Size(400.0 / 9.0, 400.0 / 9.0)
+
+        val cells = ArrayList<Mat>()
+        for (i in 0 until 9) {
+            for (j in 0 until 9) {
+                val cellRect = Rect(j * cellSize.width.toInt(), i * cellSize.height.toInt(), cellSize.width.toInt(), cellSize.height.toInt())
+                val cell = Mat(croppedSudoku, cellRect)
+                cells.add(cell)
+            }
+        }
+
+        return cells
     }
 
 }
