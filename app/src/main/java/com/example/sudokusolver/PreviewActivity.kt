@@ -19,6 +19,8 @@ import java.io.OutputStream
 
 
 class PreviewActivity : AppCompatActivity() {
+
+    val storageHelper = StorageHelper(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityPreviewBinding = DataBindingUtil.setContentView(
@@ -42,7 +44,7 @@ class PreviewActivity : AppCompatActivity() {
         val sudokuGrid = SudokuDetectionHelper.detectSudoku(matObj)
         val cells = SudokuDetectionHelper.exitractCells(sudokuGrid)
 
-        val gridUri = savesSudokuGrid(sudokuGrid)
+        val gridUri = storageHelper.saveSudokuGrid(sudokuGrid)
 
         Glide.with(this)
             .load(gridUri)
@@ -51,32 +53,4 @@ class PreviewActivity : AppCompatActivity() {
             .into(binding.photoImageView)
     }
 
-
-    private fun savesSudokuGrid(mat: Mat): Uri? {
-
-        val bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888)
-        Utils.matToBitmap(mat, bitmap)
-
-        val filePath = File(getOutputDirectory(), "grid_sudoku.jpg")
-
-        var outputStream: OutputStream? = null
-        try {
-            outputStream = FileOutputStream(filePath)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            outputStream.flush()
-            return Uri.fromFile(filePath)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            outputStream?.close()
-        }
-        return null
-    }
-
-    private fun getOutputDirectory(): File {
-        val mediaDir = externalMediaDirs.firstOrNull()?.let {
-            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
-        }
-        return mediaDir ?: filesDir
-    }
 }

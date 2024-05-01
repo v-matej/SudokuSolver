@@ -30,6 +30,8 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var imageCapture: ImageCapture
 
+    val storageHelper = StorageHelper(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityCameraBinding = DataBindingUtil.setContentView(
@@ -88,7 +90,7 @@ class CameraActivity : AppCompatActivity() {
 
     private fun takePhoto() {
         val photoFile = File(
-            getOutputDirectory(),
+            storageHelper.getOutputDirectory(),
              "sudoku.jpg"
         )
 
@@ -109,7 +111,7 @@ class CameraActivity : AppCompatActivity() {
                     val croppedBitmap = cropAndRotateBitmapToSquare(bitmap)
 
                     val croppedPhotoFile = File(
-                        getOutputDirectory(),
+                        storageHelper.getOutputDirectory(),
                         "cropped_sudoku.jpg"
                     )
 
@@ -121,13 +123,6 @@ class CameraActivity : AppCompatActivity() {
                     navigateToPreviewActivity(croppedPhotoUri)
                 }
             })
-    }
-
-    private fun getOutputDirectory(): File {
-        val mediaDir = externalMediaDirs.firstOrNull()?.let {
-            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
-        }
-        return mediaDir ?: filesDir
     }
 
     private fun navigateToPreviewActivity(photoUri: Uri) {
