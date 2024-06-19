@@ -3,4 +3,5 @@
     <string name="take_a_photo">Take a photo!</string>
     <string name="sudoku_solver">Sudoku Solver</string>
     <string name="capture">Capture</string>
+    <string name="solve">Solve</string>
 </resources>
