@@ -155,6 +155,6 @@ class CameraActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val REQUEST_CODE_PERMISSIONS = 10
+        const val REQUEST_CODE_PERMISSIONS = 10
     }
 }

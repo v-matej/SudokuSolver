@@ -1,10 +1,12 @@
 package com.example.sudokusolver
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
@@ -13,9 +15,6 @@ import com.example.sudokusolver.databinding.ActivityPreviewBinding
 import org.opencv.android.Utils
 import org.opencv.core.CvType
 import org.opencv.core.Mat
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 
 class PreviewActivity : AppCompatActivity() {
@@ -42,16 +41,23 @@ class PreviewActivity : AppCompatActivity() {
         Utils.bitmapToMat(bmp,matObj)
 
         val sudokuGrid = SudokuDetectionHelper.detectSudoku(matObj)
-        val cells = SudokuDetectionHelper.exitractCells(sudokuGrid)
+        val cells = SudokuDetectionHelper.extractCells(sudokuGrid)
 
         val gridUri = storageHelper.saveSudokuGrid(sudokuGrid)
         storageHelper.saveCells(cells)
+
+        binding.solveButton.setOnClickListener {
+            val intent = Intent(this, SolverActivity::class.java)
+            startActivity(intent)
+        }
+
 
         Glide.with(this)
             .load(gridUri)
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
             .into(binding.photoImageView)
+
     }
 
 }

@@ -58,8 +58,7 @@ object SudokuDetectionHelper {
         return warpedImage
     }
 
-    fun exitractCells(croppedSudoku:Mat): List<Mat> {
-
+    fun extractCells(croppedSudoku: Mat): List<Mat> {
         val cellSize = Size(400.0 / 9.0, 400.0 / 9.0)
 
         val cells = ArrayList<Mat>()
@@ -67,11 +66,20 @@ object SudokuDetectionHelper {
             for (j in 0 until 9) {
                 val cellRect = Rect(j * cellSize.width.toInt(), i * cellSize.height.toInt(), cellSize.width.toInt(), cellSize.height.toInt())
                 val cell = Mat(croppedSudoku, cellRect)
-                cells.add(cell)
+
+                val grayCell = Mat()
+                Imgproc.cvtColor(cell, grayCell, Imgproc.COLOR_BGR2GRAY)
+
+                val invertedCell = Mat()
+                Core.bitwise_not(grayCell, invertedCell)
+
+                val binaryCell = Mat()
+                Imgproc.threshold(invertedCell, binaryCell, 0.0, 255.0, Imgproc.THRESH_BINARY + Imgproc.THRESH_OTSU)
+
+                cells.add(binaryCell)
             }
         }
 
         return cells
     }
-
 }
